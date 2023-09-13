@@ -36,7 +36,6 @@ class PineconeDataStore(DataStore):
     def __init__(self):
         # Check if the index name is specified and exists in Pinecone
         if PINECONE_INDEX and PINECONE_INDEX not in pinecone.list_indexes():
-
             # Get all fields in the metadata object in a list
             fields_to_index = list(DocumentChunkMetadata.__fields__.keys())
 
@@ -194,16 +193,17 @@ class PineconeDataStore(DataStore):
                 raise e
 
         # Convert the metadata filter object to a dict with pinecone filter expressions
-        pinecone_filter = self._get_pinecone_filter(filter)
-        # Delete vectors that match the filter from the index if the filter is not empty
-        if pinecone_filter != {}:
-            try:
-                logger.info(f"Deleting vectors with filter {pinecone_filter}")
-                self.index.delete(filter=pinecone_filter)
-                logger.info(f"Deleted vectors with filter successfully")
-            except Exception as e:
-                logger.error(f"Error deleting vectors with filter: {e}")
-                raise e
+        # pinecone_filter = self._get_pinecone_filter(filter)
+        # # Delete vectors that match the filter from the index if the filter is not empty
+        # if pinecone_filter != {}:
+        #     try:
+        #         logger.info(f"Deleting vectors with filter {pinecone_filter}")
+        #         ## DAN UNSUPPORTED in Starter Plan
+        #         # self.index.delete(filter=pinecone_filter)
+        #         logger.info(f"Deleted vectors with filter successfully")
+        #     except Exception as e:
+        #         logger.error(f"Error deleting vectors with filter: {e}")
+        #         raise e
 
         # Delete vectors that match the document ids from the index if the ids list is not empty
         if ids is not None and len(ids) > 0:
